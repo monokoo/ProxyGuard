@@ -1,0 +1,242 @@
+[2026-02-13 00:09:19.109] Handle Proxy Change:
+[2026-02-13 00:09:19.110]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:09:19.110]   System State: currentPort=7897, active=true
+[2026-02-13 00:09:19.110]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:09:19.110]   Decision Matrix:
+[2026-02-13 00:09:19.110]   Scenario Check: Proxyman Closed
+[2026-02-13 00:09:19.110]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:09:19.110]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:09:19.281] Handle Proxy Change:
+[2026-02-13 00:09:19.281]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:09:19.281]   System State: currentPort=7897, active=true
+[2026-02-13 00:09:19.281]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:09:19.281]   Decision Matrix:
+[2026-02-13 00:09:19.281]   Scenario Check: Proxyman Closed
+[2026-02-13 00:09:19.281]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:09:19.281]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:09:19.688] Handle Proxy Change:
+[2026-02-13 00:09:19.688]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:09:19.688]   System State: currentPort=0, active=false
+[2026-02-13 00:09:19.688]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:09:19.688]   Decision Matrix:
+[2026-02-13 00:09:19.688]   Scenario Check: Proxyman Closed
+[2026-02-13 00:09:19.688]     Condition: Proxy cleared, Clash Enabled
+[2026-02-13 00:09:19.688]   -> Scenario 4a: Proxy cleared + Clash enabled + Running → restoring
+[2026-02-13 00:09:42.233] Handle Proxy Change:
+[2026-02-13 00:09:42.234]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:09:42.234]   System State: currentPort=7897, active=true
+[2026-02-13 00:09:42.234]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:09:42.234]   Decision Matrix:
+[2026-02-13 00:09:42.234]   Scenario Check: Proxyman Closed
+[2026-02-13 00:09:42.234]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:09:42.234]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:09:42.304] Handle Proxy Change:
+[2026-02-13 00:09:42.305]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:09:42.305]   System State: currentPort=7897, active=true
+[2026-02-13 00:09:42.305]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:09:42.305]   Decision Matrix:
+[2026-02-13 00:09:42.305]   Scenario Check: Proxyman Closed
+[2026-02-13 00:09:42.305]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:09:42.305]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:10:37.548] Handle Proxy Change:
+[2026-02-13 00:10:37.548]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:10:37.548]   System State: currentPort=7897, active=true
+[2026-02-13 00:10:37.550]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:10:37.556]   Decision Matrix:
+[2026-02-13 00:10:37.557]   Scenario Check: Proxyman Closed
+[2026-02-13 00:10:37.557]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:10:37.557]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:10:37.733] Handle Proxy Change:
+[2026-02-13 00:10:37.733]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:10:37.759]   System State: currentPort=7897, active=true
+[2026-02-13 00:10:37.759]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:10:37.760]   Decision Matrix:
+[2026-02-13 00:10:37.760]   Scenario Check: Proxyman Closed
+[2026-02-13 00:10:37.760]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:10:37.762]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:10:37.917] Handle Proxy Change:
+[2026-02-13 00:10:37.917]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:10:37.917]   System State: currentPort=0, active=false
+[2026-02-13 00:10:37.917]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:10:37.917]   Decision Matrix:
+[2026-02-13 00:10:37.918]   Scenario Check: Proxyman Closed
+[2026-02-13 00:10:37.918]     Condition: Proxy cleared, Clash Enabled
+[2026-02-13 00:10:37.918]   -> Scenario 4a: Proxy cleared + Clash enabled + Running → restoring
+[2026-02-13 00:10:52.247] Handle Proxy Change:
+[2026-02-13 00:10:52.247]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:10:52.247]   System State: currentPort=7897, active=true
+[2026-02-13 00:10:52.247]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:10:52.247]   Decision Matrix:
+[2026-02-13 00:10:52.247]   Scenario Check: Proxyman Closed
+[2026-02-13 00:10:52.248]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:10:52.248]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:10:52.319] Handle Proxy Change:
+[2026-02-13 00:10:52.319]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:10:52.319]   System State: currentPort=7897, active=true
+[2026-02-13 00:10:52.319]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:10:52.319]   Decision Matrix:
+[2026-02-13 00:10:52.319]   Scenario Check: Proxyman Closed
+[2026-02-13 00:10:52.319]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:10:52.319]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:10:52.530] Handle Proxy Change:
+[2026-02-13 00:10:52.530]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:10:52.530]   System State: currentPort=0, active=false
+[2026-02-13 00:10:52.530]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:10:52.530]   Decision Matrix:
+[2026-02-13 00:10:52.530]   Scenario Check: Proxyman Closed
+[2026-02-13 00:10:52.531]     Condition: Proxy cleared, Clash Enabled
+[2026-02-13 00:10:52.531]   -> Scenario 4a: Proxy cleared + Clash enabled + Running → restoring
+[2026-02-13 00:11:10.325] Handle Proxy Change:
+[2026-02-13 00:11:10.326]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:11:10.326]   System State: currentPort=7897, active=true
+[2026-02-13 00:11:10.326]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:11:10.326]   Decision Matrix:
+[2026-02-13 00:11:10.326]   Scenario Check: Proxyman Closed
+[2026-02-13 00:11:10.326]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:11:10.326]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:11:10.400] Handle Proxy Change:
+[2026-02-13 00:11:10.402]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:11:10.402]   System State: currentPort=7897, active=true
+[2026-02-13 00:11:10.402]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:11:10.402]   Decision Matrix:
+[2026-02-13 00:11:10.402]   Scenario Check: Proxyman Closed
+[2026-02-13 00:11:10.403]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:11:10.403]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:17:28.055] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:28.119] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:17:33.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:33.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:17:38.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:38.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:17:43.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:43.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:17:48.185] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:48.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:17:53.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:53.247] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:17:58.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:17:58.254] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:03.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:03.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:08.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:08.224] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:08.445] === ProxyGuard Started ===
+[2026-02-13 00:18:08.445] App Version: 3.1
+[2026-02-13 00:18:12.706] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:12.762] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:12.826] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:12.826] Handle Proxy Change:
+[2026-02-13 00:18:12.826]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:18:12.826]   System State: currentPort=7897, active=true
+[2026-02-13 00:18:12.826]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:18:12.826]   Decision Matrix:
+[2026-02-13 00:18:12.826]   Scenario Check: Proxyman Closed
+[2026-02-13 00:18:12.826]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:18:12.826]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:18:12.827] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:12.827] Handle Proxy Change:
+[2026-02-13 00:18:12.827]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:18:12.827]   System State: currentPort=7897, active=true
+[2026-02-13 00:18:12.827]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:18:12.827]   Decision Matrix:
+[2026-02-13 00:18:12.827]   Scenario Check: Proxyman Closed
+[2026-02-13 00:18:12.827]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:18:12.827]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:18:13.003] === ProxyGuard Started ===
+[2026-02-13 00:18:13.004] App Version: 3.1
+[2026-02-13 00:18:13.102] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:13.157] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:13.157] Handle Proxy Change:
+[2026-02-13 00:18:13.157]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:18:13.157]   System State: currentPort=0, active=false
+[2026-02-13 00:18:13.157]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:18:13.157]   Decision Matrix:
+[2026-02-13 00:18:13.157]   Scenario Check: Proxyman Closed
+[2026-02-13 00:18:13.157]     Condition: Proxy cleared, Clash Enabled
+[2026-02-13 00:18:13.157]   -> Scenario 4a: Proxy cleared + Clash enabled + Running → restoring
+[2026-02-13 00:18:13.190] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:13.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:18.183] [ProcessChecker] Clash Verge UI NOT detected
+[2026-02-13 00:18:23.183] [ProcessChecker] Clash Verge UI NOT detected
+[2026-02-13 00:18:25.420] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:25.485] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:25.486] Handle Proxy Change:
+[2026-02-13 00:18:25.486]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:18:25.486]   System State: currentPort=7897, active=true
+[2026-02-13 00:18:25.486]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:18:25.486]   Decision Matrix:
+[2026-02-13 00:18:25.486]   Scenario Check: Proxyman Closed
+[2026-02-13 00:18:25.486]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:18:25.486]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:18:25.486] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:25.569] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:25.569] Handle Proxy Change:
+[2026-02-13 00:18:25.569]   Clash Config: enabled=true, port=7897
+[2026-02-13 00:18:25.569]   System State: currentPort=7897, active=true
+[2026-02-13 00:18:25.569]   Process State: ClashVerge=true, Proxyman=false
+[2026-02-13 00:18:25.569]   Decision Matrix:
+[2026-02-13 00:18:25.569]   Scenario Check: Proxyman Closed
+[2026-02-13 00:18:25.569]     Condition: Port is Clash's (7897), Clash Enabled
+[2026-02-13 00:18:25.569]   -> Scenario 3a: Clash running, no intervention needed
+[2026-02-13 00:18:28.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:28.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:33.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:33.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:38.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:38.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:43.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:43.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:48.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:48.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:53.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:53.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:18:58.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:18:58.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:03.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:03.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:08.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:08.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:13.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:13.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:18.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:18.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:23.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:23.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:28.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:28.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:33.185] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:33.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:38.190] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:38.251] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:43.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:43.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:48.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:48.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:53.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:53.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:19:58.190] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:19:58.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:03.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:03.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:08.183] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:08.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:13.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:13.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:18.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:18.248] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:23.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:23.251] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:28.185] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:28.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:33.185] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:33.251] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:38.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:38.251] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:43.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:43.250] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:48.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:48.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:53.184] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:53.249] [ProcessChecker] Clash Service detected: clash-verge-service
+[2026-02-13 00:20:58.187] [ProcessChecker] Clash Verge UI detected (Bundle ID match)
+[2026-02-13 00:20:58.250] [ProcessChecker] Clash Service detected: clash-verge-service
