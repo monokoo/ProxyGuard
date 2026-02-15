@@ -5,12 +5,14 @@ import ServiceManagement
 // MARK: - 设置页主视图
 struct SettingsView: View {
 
-    @ObservedObject var configStore: ConfigStore
-    @ObservedObject var monitor: ProxyMonitor
+    @Bindable var configStore: ConfigStore
+    var monitor: ProxyMonitor
 
     @State private var showResetAlert = false
     @State private var launchAtLogin: Bool = SMAppService.mainApp.status == .enabled
     @State private var selectedTab: SettingsTab = .proxy
+    @State private var configFileExists = false
+    @State private var localDelay: Double = 2.0
     // 缓存 AppIcon 避免切换 Tab 时重复加载闪烁
     private let appIcon: NSImage? = NSImage(contentsOfFile: Bundle.main.bundlePath + "/Contents/Resources/AppIcon.icns")
 
@@ -56,6 +58,15 @@ struct SettingsView: View {
             }
         }
         .frame(width: DesignSystem.settingsWidth, height: DesignSystem.settingsHeight)
+        .onAppear {
+            let expanded = (configStore.config.clashConfigPath as NSString).expandingTildeInPath
+            configFileExists = FileManager.default.fileExists(atPath: expanded)
+            localDelay = configStore.config.restoreDelaySeconds
+        }
+        .onChange(of: configStore.config.clashConfigPath) { newPath in
+            let expanded = (newPath as NSString).expandingTildeInPath
+            configFileExists = FileManager.default.fileExists(atPath: expanded)
+        }
     }
 
     // MARK: - 侧边栏
@@ -312,16 +323,22 @@ struct SettingsView: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(.white)
                         Spacer()
-                        Text("\(configStore.config.restoreDelaySeconds, specifier: "%.1f") s")
+                        Text("\(localDelay, specifier: "%.1f") s")
                             .font(.system(size: 13, weight: .bold, design: .monospaced))
                             .foregroundColor(.neonBlue)
                     }
 
                     Slider(
-                        value: $configStore.config.restoreDelaySeconds,
+                        value: $localDelay,
                         in: 0.5...5.0,
                         step: 0.5
-                    )
+                    ) {
+                        EmptyView()
+                    } onEditingChanged: { editing in
+                        if !editing {
+                            configStore.config.restoreDelaySeconds = localDelay
+                        }
+                    }
                     .tint(.neonBlue)
 
                     HStack {
@@ -362,6 +379,15 @@ struct SettingsView: View {
                     .frame(width: 120)
                 }
                 .padding(14)
+            }
+
+            // 日志开关
+            darkCard {
+                darkToggleRow(
+                    title: L10n.loggingEnabled,
+                    description: L10n.loggingEnabledDescription,
+                    isOn: $configStore.config.loggingEnabled
+                )
             }
         }
     }
@@ -418,8 +444,7 @@ struct SettingsView: View {
 
                     // 文件状态
                     HStack(spacing: 4) {
-                        let path = (configStore.config.clashConfigPath as NSString).expandingTildeInPath
-                        if FileManager.default.fileExists(atPath: path) {
+                        if configFileExists {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.neonGreen)
                                 .font(.system(size: 11))
@@ -502,7 +527,7 @@ struct SettingsView: View {
                     .padding(.vertical, 40)
                 }
             } else {
-                darkCard {
+            darkCard {
                     VStack(spacing: 0) {
                         ForEach(Array(monitor.eventHistory.enumerated()), id: \.element.id) { index, event in
                             if index > 0 {
@@ -609,10 +634,6 @@ struct SettingsView: View {
         content()
             .background(Color.white.opacity(0.08))
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-            )
     }
 
     private func darkToggleRow(title: String, description: String, isOn: Binding<Bool>) -> some View {
@@ -696,9 +717,13 @@ struct SettingsView: View {
         }
     }
 
+    private static let fullDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return f
+    }()
+
     private func formatFullDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter.string(from: date)
+        Self.fullDateFormatter.string(from: date)
     }
 }

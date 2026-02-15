@@ -27,7 +27,7 @@ enum ProcessChecker {
     
     // 1 second cache to prevent spamming sysctl in tight loops
     private static var cache: ProcessCache?
-    private static let cacheDuration: TimeInterval = 1.0
+    private static let cacheDuration: TimeInterval = 5.0
 
     // MARK: - Public API
 
@@ -87,7 +87,7 @@ enum ProcessChecker {
                 return true
             }
         }
-        return containsProcess(name: "Proxyman", in: getRunningProcessNames())
+        return false
     }
 
     static func getDiagnosticsReport(kernelHint: String? = nil) -> String {

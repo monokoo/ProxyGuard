@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct DiagnosticsView: View {
-    @ObservedObject var monitor: ProxyMonitor
-    @ObservedObject var configStore: ConfigStore
+    var monitor: ProxyMonitor
+    var configStore: ConfigStore
     
     @State private var report: String = L10n.loadingReport
-    @State private var timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    @State private var timer: Timer?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -19,9 +19,13 @@ struct DiagnosticsView: View {
         }
         .onAppear {
             refreshReport()
+            timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+                refreshReport()
+            }
         }
-        .onReceive(timer) { _ in
-            refreshReport()
+        .onDisappear {
+            timer?.invalidate()
+            timer = nil
         }
     }
     
@@ -63,10 +67,6 @@ struct DiagnosticsView: View {
         .padding(14)
         .background(Color.white.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-        )
     }
     
     private var processReportCard: some View {
@@ -89,10 +89,6 @@ struct DiagnosticsView: View {
         .padding(14)
         .background(Color.white.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.white.opacity(0.08), lineWidth: 0.5)
-        )
     }
     
     private func refreshReport() {

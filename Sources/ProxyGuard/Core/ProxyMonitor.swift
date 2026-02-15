@@ -1,15 +1,16 @@
 import Foundation
 import SystemConfiguration
-import Combine
 import AppKit
+import Observation
 
-final class ProxyMonitor: ObservableObject {
+@Observable
+final class ProxyMonitor {
 
-    @Published private(set) var currentState: ProxyState = .empty
-    @Published private(set) var eventHistory: [ProxyEvent] = []
-    @Published private(set) var isClashVergeRunning: Bool = false
-    @Published private(set) var isProxymanRunning: Bool = false
-    @Published var isPaused: Bool = false {
+    private(set) var currentState: ProxyState = .empty
+    private(set) var eventHistory: [ProxyEvent] = []
+    private(set) var isClashVergeRunning: Bool = false
+    private(set) var isProxymanRunning: Bool = false
+    var isPaused: Bool = false {
         didSet {
             if isPaused {
                 // Remove observers
@@ -35,6 +36,9 @@ final class ProxyMonitor: ObservableObject {
     // This prevents race conditions where the proxy close event triggers a restore
     // because ProcessChecker might still report Clash as running for a split second
     private var suppressRestoreUntilClashRestart = false
+    
+    // Debounce work item for proxy change callbacks
+    private var debounceWorkItem: DispatchWorkItem?
     
     // Observers token
     private var observers: [NSObjectProtocol] = []
@@ -174,8 +178,8 @@ final class ProxyMonitor: ObservableObject {
             refreshProcessStatus()
             
             // Optional: Double check after 1s for "Launch" events where service might start late
-            if notification.name == NSWorkspace.didLaunchApplicationNotification {
-                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+             if notification.name == NSWorkspace.didLaunchApplicationNotification {
+                 scheduleTolerantly(1.0, tolerance: 0.5) { [weak self] in
                      self?.refreshProcessStatus()
                  }
             }
@@ -203,6 +207,17 @@ final class ProxyMonitor: ObservableObject {
     }
 
     fileprivate func handleProxyChange() {
+        // Debounce: coalesce rapid proxy change callbacks into one
+        debounceWorkItem?.cancel()
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.processProxyChange()
+        }
+        debounceWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+    }
+
+    private func processProxyChange() {
         // 暂停模式：完全休眠，不更新状态，不做任何处理
         guard !isPaused else {
             print("[ProxyGuard] Paused, ignoring proxy change entirely")
@@ -266,8 +281,8 @@ final class ProxyMonitor: ObservableObject {
                         // Scenario 1b: Clash process not running → close proxy
                         LogManager.shared.log("  -> Scenario 1b: Clash enabled but not running, closing proxy")
                         isRestoring = true
-                        suppressRestoreUntilClashRestart = true // Prevent immediate restore
-                        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                        suppressRestoreUntilClashRestart = true
+                        scheduleDelayed(delay) { [weak self] in
                             self?.closeProxy()
                         }
                         return
@@ -282,7 +297,7 @@ final class ProxyMonitor: ObservableObject {
                 // Restore to Proxyman proxy
                 LogManager.shared.log("  -> Scenario 2: Clash disabled, restoring to Proxyman")
                 isRestoring = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                scheduleDelayed(delay) { [weak self] in
                     self?.restoreToProxyman()
                 }
                 return
@@ -293,7 +308,7 @@ final class ProxyMonitor: ObservableObject {
                 LogManager.shared.log("    Condition: Proxy cleared, Clash Enabled, Clash Running")
                 LogManager.shared.log("  -> Scenario 1c: Proxyman bg + proxy cleared + Clash enabled → restoring Clash")
                 isRestoring = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                scheduleDelayed(delay) { [weak self] in
                     self?.restoreToClash()
                     self?.refreshProcessStatus()
                 }
@@ -314,8 +329,8 @@ final class ProxyMonitor: ObservableObject {
                 // Scenario 3b: Clash process not running → close proxy
                 LogManager.shared.log("  -> Scenario 3b: Clash enabled but not running, closing proxy")
                 isRestoring = true
-                suppressRestoreUntilClashRestart = true // Prevent immediate restore
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                suppressRestoreUntilClashRestart = true
+                scheduleDelayed(delay) { [weak self] in
                     self?.closeProxy()
                 }
                 return
@@ -333,11 +348,7 @@ final class ProxyMonitor: ObservableObject {
                 // Scenario 4a: Clash running → restore Clash proxy
                 LogManager.shared.log("  -> Scenario 4a: Proxy cleared + Clash enabled + Running → scheduling restore check")
                 isRestoring = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                    // Re-check process status to handle Teardown Race Condition
-                    // (Clash might be quitting: blocked proxy -> process exit)
-                    // Note: We don't have the config handy here easily without re-reading, 
-                    // but delay is short, cache likely valid.
+                scheduleDelayed(delay) { [weak self] in
                     let freshConfig = ClashConfigReader.readConfig(from: self?.configStore.config.clashConfigPath ?? "")
                     let hint = freshConfig?.kernelName
                     
@@ -372,7 +383,7 @@ final class ProxyMonitor: ObservableObject {
                 // Scenario 6a: Restore to Clash proxy
                 print("[ProxyGuard] Scenario 6a: Restoring to Clash proxy")
                 isRestoring = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                scheduleDelayed(delay) { [weak self] in
                     self?.restoreToClash()
                 }
                 return
@@ -380,7 +391,7 @@ final class ProxyMonitor: ObservableObject {
             // Scenario 6b: Clash not running → close proxy
             print("[ProxyGuard] Scenario 6b: Clash not running, closing proxy")
             isRestoring = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            scheduleDelayed(delay) { [weak self] in
                 self?.closeProxy()
             }
             return
@@ -390,7 +401,7 @@ final class ProxyMonitor: ObservableObject {
             // Scenario 7: Proxyman closed, port is Proxyman's, Clash disabled
             print("[ProxyGuard] Scenario 7: Clash disabled, closing proxy")
             isRestoring = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            scheduleDelayed(delay) { [weak self] in
                 self?.closeProxy()
             }
             return
@@ -445,7 +456,7 @@ final class ProxyMonitor: ObservableObject {
                 let next = retryAttempt + 1
                 print("[ProxyGuard] Restore failed, retrying (\(next)/\(maxRetries)) in \(delay)s...")
                 recordEvent(.retrying(next))
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                scheduleTolerantly(delay, tolerance: 1.0) { [weak self] in
                     self?.restoreToClash(retryAttempt: next)
                 }
             } else {
@@ -458,7 +469,7 @@ final class ProxyMonitor: ObservableObject {
     func restoreToProxyman() {
         // 延迟重置 isRestoring，防止代理变化事件竞态
         func delayedResetRestoring() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            scheduleTolerantly(3.0, tolerance: 1.0) { [weak self] in
                 self?.isRestoring = false
             }
         }
@@ -477,7 +488,8 @@ final class ProxyMonitor: ObservableObject {
             clashConfigPath: configStore.config.clashConfigPath,
             clashEnableField: configStore.config.clashEnableField,
             retryEnabled: configStore.config.retryEnabled,
-            maxRetryCount: configStore.config.maxRetryCount
+            maxRetryCount: configStore.config.maxRetryCount,
+            loggingEnabled: configStore.config.loggingEnabled
         )
 
         let result = restorer.restore(with: config)
@@ -501,7 +513,7 @@ final class ProxyMonitor: ObservableObject {
         // closeProxy 修改系统代理 → 触发 SCDynamicStore 回调 → handleProxyChange
         // 如果立即重置 isRestoring，后续事件可能因进程检测延迟而错误恢复代理
         func delayedResetRestoring() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+            scheduleTolerantly(3.0, tolerance: 1.0) { [weak self] in
                 self?.isRestoring = false
             }
         }
@@ -552,6 +564,22 @@ final class ProxyMonitor: ObservableObject {
                 self.eventHistory.removeLast()
             }
         }
+    }
+
+    // MARK: - Timer Helpers
+
+    /// Schedule a delayed action with moderate tolerance for system wake coalescing
+    private func scheduleDelayed(_ delay: TimeInterval, action: @escaping () -> Void) {
+        let timer = Timer(timeInterval: delay, repeats: false) { _ in action() }
+        timer.tolerance = delay * 0.3 // 30% tolerance
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    /// Schedule with explicit tolerance for non-critical timers (reduces idle wakeups)
+    private func scheduleTolerantly(_ delay: TimeInterval, tolerance: TimeInterval, action: @escaping () -> Void) {
+        let timer = Timer(timeInterval: delay, repeats: false) { _ in action() }
+        timer.tolerance = tolerance
+        RunLoop.main.add(timer, forMode: .common)
     }
 }
 

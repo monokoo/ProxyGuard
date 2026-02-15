@@ -112,46 +112,7 @@ extension Color {
 }
 
 // MARK: - View Modifiers
-struct GlassCardModifier: ViewModifier {
-    var cornerRadius: CGFloat = DesignSystem.radiusM
-    var padding: CGFloat = DesignSystem.spacingM
-    
-    func body(content: Content) -> some View {
-        content
-            .padding(padding)
-            .background(.regularMaterial) // Native macOS glass material
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .stroke(LinearGradient(
-                        colors: [.white.opacity(0.2), .white.opacity(0.05)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ), lineWidth: 1)
-            )
-            .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-    }
-}
-
-struct NeonGlowModifier: ViewModifier {
-    var color: Color
-    var radius: CGFloat = 8
-    
-    func body(content: Content) -> some View {
-        content
-            .shadow(color: color.opacity(0.6), radius: radius, x: 0, y: 0)
-    }
-}
-
 extension View {
-    func glassCard(cornerRadius: CGFloat = DesignSystem.radiusM, padding: CGFloat = DesignSystem.spacingM) -> some View {
-        modifier(GlassCardModifier(cornerRadius: cornerRadius, padding: padding))
-    }
-    
-    func neonGlow(color: Color, radius: CGFloat = 8) -> some View {
-        modifier(NeonGlowModifier(color: color, radius: radius))
-    }
-    
     func appFont(_ size: CGFloat, weight: Font.Weight = .regular, design: Font.Design = .default) -> some View {
         self.font(.system(size: size, weight: weight, design: design))
     }

@@ -16,3 +16,7 @@ DerivedData/
 
 # Logs
 Logs/
+proxyguard_debug.log
+
+# Other
+.env

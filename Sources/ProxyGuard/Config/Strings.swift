@@ -284,6 +284,14 @@ enum L10n {
         current == .zh ? "重试中" : "Retrying"
     }
 
+    static var loggingEnabled: String {
+        current == .zh ? "日志记录" : "Logging"
+    }
+
+    static var loggingEnabledDescription: String {
+        current == .zh ? "开启后将记录运行日志到本地文件" : "Write runtime logs to local file when enabled"
+    }
+
     // MARK: - About Tab
     static var aboutDescription: String {
         current == .zh

@@ -3,23 +3,16 @@ import AppKit
 
 struct MenuBarView: View {
 
-    @ObservedObject var monitor: ProxyMonitor
-    @ObservedObject var configStore: ConfigStore
-
-    // Neon glow animation state
-    @State private var isAnimating = false
+    var monitor: ProxyMonitor
+    @Bindable var configStore: ConfigStore
 
     var body: some View {
         ZStack {
-            // 1. Global Background
-            Color.brandGradient
-                .ignoresSafeArea()
-            
-            // 2. Content
+            Color.brandGradient.ignoresSafeArea()
+
             VStack(spacing: DesignSystem.spacingM) {
                 headerSection
                 
-                // Scrollable Content Area
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: DesignSystem.spacingM) {
                         statsGrid
@@ -29,36 +22,26 @@ struct MenuBarView: View {
                         eventLogSection
                     }
                     .padding(.horizontal, DesignSystem.spacingM)
-                    .padding(.bottom, 4) // Reduced bottom padding
+                    .padding(.bottom, 4)
                 }
                 
                 footerSection
-                    .padding(.top, -DesignSystem.spacingS) // Pull footer up slightly
+                    .padding(.top, -DesignSystem.spacingS)
             }
         }
-        .frame(width: 320, height: 500) // Fixed size for consistent "Pro" feel
-        .onAppear {
-            isAnimating = true
-        }
+        .frame(width: 320, height: 500)
     }
 
     // MARK: - Header
     private var headerSection: some View {
         HStack {
-            // Icon with Glow
-            ZStack {
-                Circle()
-                    .fill(statusColor.opacity(0.2))
-                    .frame(width: 40, height: 40)
-                    .blur(radius: isAnimating ? 8 : 4)
-                    .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: isAnimating)
-                
-                Image(systemName: "shield.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(statusColor)
-            }
+            // Status indicator (no animation, no blur)
+            Image(systemName: "shield.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 20, height: 20)
+                .foregroundColor(statusColor)
+                .shadow(color: statusColor.opacity(0.5), radius: 4)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text("ProxyGuard")
@@ -181,20 +164,12 @@ struct PortStatItem: View, Equatable {
             Spacer()
         }
         .padding(10)
-        .frame(height: 40) // 统一卡片高度
+        .frame(height: 40)
+        .frame(maxWidth: .infinity)
         .background(Color.white.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(.white.opacity(isActive ? 0.15 : 0.06), lineWidth: 0.5)
-        )
-        // Fixed frame
-        .frame(maxWidth: .infinity)
-        // Disable implicit animations
         .animation(nil, value: isActive)
         .animation(nil, value: value)
-        // GPU-accelerated off-screen rendering to isolate from material compositing
-        .drawingGroup()
     }
 }
 
@@ -208,13 +183,9 @@ struct PortStatItem: View, Equatable {
             )
         }
         .padding(DesignSystem.spacingS)
-        .frame(height: 40) // 统一卡片高度
+        .frame(height: 40)
         .background(Color.white.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: DesignSystem.radiusM))
-        .overlay(
-            RoundedRectangle(cornerRadius: DesignSystem.radiusM)
-                .stroke(.white.opacity(0.1), lineWidth: 0.5)
-        )
     }
 
     // MARK: - System Proxy Status
@@ -265,13 +236,9 @@ struct PortStatItem: View, Equatable {
                     .shadow(color: monitor.currentState.isActive ? systemProxyColor : .clear, radius: 4)
             }
             .padding(.horizontal, 14)
-            .frame(height: 40) // 统一卡片高度
+            .frame(height: 40)
             .background(Color.white.opacity(0.08))
             .clipShape(RoundedRectangle(cornerRadius: DesignSystem.radiusS))
-            .overlay(
-                RoundedRectangle(cornerRadius: DesignSystem.radiusS)
-                    .stroke(.white.opacity(0.1), lineWidth: 0.5)
-            )
         }
     }
 
@@ -323,10 +290,9 @@ struct PortStatItem: View, Equatable {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 40) // 统一卡片高度
+        .frame(height: 40)
         .background(Color.white.opacity(0.08))
         .clipShape(Capsule())
-        .overlay(Capsule().stroke(.white.opacity(0.1), lineWidth: 0.5))
     }
 
     // MARK: - Event Log
@@ -346,8 +312,8 @@ struct PortStatItem: View, Equatable {
                     .foregroundColor(.white.opacity(0.3))
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.white.opacity(0.08).opacity(0.5))
-                    .cornerRadius(8)
+                    .background(Color.white.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
             } else {
                 ForEach(monitor.eventHistory.prefix(3)) { event in
                     HStack(spacing: 8) {
@@ -371,7 +337,7 @@ struct PortStatItem: View, Equatable {
                     .padding(.vertical, 6)
                     .padding(.horizontal, 8)
                     .background(Color.white.opacity(0.08))
-                    .cornerRadius(6)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
                 }
             }
         }
@@ -398,9 +364,7 @@ struct PortStatItem: View, Equatable {
             .font(.system(size: 10, weight: .semibold))
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .background(Color.white.opacity(0.1))
             .foregroundColor(.white)
-            .clipShape(Capsule())
             .buttonStyle(.plain)
 
             Spacer()
@@ -418,9 +382,7 @@ struct PortStatItem: View, Equatable {
         .padding(.horizontal, DesignSystem.spacingL)
         .padding(.bottom, DesignSystem.spacingL)
         .padding(.top, DesignSystem.spacingS)
-        .background(
-            LinearGradient(colors: [.black.opacity(0), .black.opacity(0.4)], startPoint: .top, endPoint: .bottom)
-        )
+
     }
     
     // MARK: - Helpers & Computed Props
@@ -469,10 +431,14 @@ struct PortStatItem: View, Equatable {
         }
     }
     
+    private static let eventDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "HH:mm:ss"
+        return f
+    }()
+
     private func formatEventDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        return formatter.string(from: date)
+        Self.eventDateFormatter.string(from: date)
     }
 }
 
@@ -554,3 +520,5 @@ struct ToggleRow: View {
         .padding(8)
     }
 }
+
+// Isolated breathing glow animation — GPU rendered, does not trigger parent body diff

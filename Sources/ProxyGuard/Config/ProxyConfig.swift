@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 
 struct ProxyConfig: Codable, Equatable {
     var httpEnabled: Bool
@@ -15,6 +16,7 @@ struct ProxyConfig: Codable, Equatable {
     var clashEnableField: String
     var retryEnabled: Bool
     var maxRetryCount: Int
+    var loggingEnabled: Bool
 
     static let `default` = ProxyConfig(
         httpEnabled: true,
@@ -30,17 +32,19 @@ struct ProxyConfig: Codable, Equatable {
         clashConfigPath: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/verge.yaml",
         clashEnableField: "enable_system_proxy",
         retryEnabled: true,
-        maxRetryCount: 3
+        maxRetryCount: 3,
+        loggingEnabled: true
     )
 }
 
-final class ConfigStore: ObservableObject {
+@Observable
+final class ConfigStore {
 
     static let shared = ConfigStore()
 
     private static let storageKey = "proxyConfig"
 
-    @Published var config: ProxyConfig {
+    var config: ProxyConfig {
         didSet {
             save()
         }

@@ -3,8 +3,8 @@ import SwiftUI
 @main
 struct ProxyGuardApp: App {
 
-    @StateObject private var configStore = ConfigStore.shared
-    @StateObject private var monitor: ProxyMonitor = {
+    @State private var configStore = ConfigStore.shared
+    @State private var monitor: ProxyMonitor = {
         let m = ProxyMonitor(configStore: ConfigStore.shared)
         m.startMonitoring()
         return m

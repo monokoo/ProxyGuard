@@ -4,7 +4,7 @@ struct ClashConfigReader {
 
     private static var cachedConfig: ClashConfig?
     private static var cacheTimestamp: Date?
-    private static let cacheValidDuration: TimeInterval = 1.0
+    private static let cacheValidDuration: TimeInterval = 5.0
 
     static func readConfig(from path: String) -> ClashConfig? {
         // Check cache first
