@@ -92,6 +92,9 @@ final class ProxyMonitor {
         // Setup event-driven observers instead of polling
         setupProcessObservers()
 
+        // Sync terminal proxy env file based on current state
+        syncTerminalProxyState()
+
         print("[ProxyGuard] Monitoring started. Initial state: \(previousState)")
     }
 
@@ -448,6 +451,7 @@ final class ProxyMonitor {
             previousState = restored
             currentState = restored
             recordEvent(.restored)
+            setTerminalProxy(enabled: true)
         case .failure(let error):
             let maxRetries = configStore.config.maxRetryCount
             if configStore.config.retryEnabled && retryAttempt < maxRetries {
@@ -489,7 +493,9 @@ final class ProxyMonitor {
             clashEnableField: configStore.config.clashEnableField,
             retryEnabled: configStore.config.retryEnabled,
             maxRetryCount: configStore.config.maxRetryCount,
-            loggingEnabled: configStore.config.loggingEnabled
+            loggingEnabled: configStore.config.loggingEnabled,
+            terminalProxyEnabled: configStore.config.terminalProxyEnabled,
+            terminalProxyLiveReload: configStore.config.terminalProxyLiveReload
         )
 
         let result = restorer.restore(with: config)
@@ -526,6 +532,7 @@ final class ProxyMonitor {
             previousState = closed
             currentState = closed
             recordEvent(.closedByClashDead)
+            setTerminalProxy(enabled: false)
             delayedResetRestoring()
         case .failure(let error):
             print("[ProxyGuard] Proxy close failed: \(error)")
@@ -580,6 +587,40 @@ final class ProxyMonitor {
         let timer = Timer(timeInterval: delay, repeats: false) { _ in action() }
         timer.tolerance = tolerance
         RunLoop.main.add(timer, forMode: .common)
+    }
+
+    // MARK: - Terminal Proxy Integration
+
+    /// Sync terminal proxy env file based on current proxy state (called at startup).
+    private func syncTerminalProxyState() {
+        guard configStore.config.terminalProxyEnabled else { return }
+
+        let liveReload = configStore.config.terminalProxyLiveReload
+        let port = configStore.config.httpPort
+
+        let state = readCurrentProxyState()
+        let enabled = (state.httpPort ?? 0) > 0 || (state.httpsPort ?? 0) > 0
+        DispatchQueue.global(qos: .utility).async {
+            if enabled {
+                TerminalProxyManager.updateEnvFile(port: port, liveReload: liveReload)
+            } else {
+                TerminalProxyManager.clearEnvFile(liveReload: liveReload)
+            }
+        }
+    }
+
+    /// Update or clear terminal proxy env file on a background thread.
+    private func setTerminalProxy(enabled: Bool) {
+        guard configStore.config.terminalProxyEnabled else { return }
+        let liveReload = configStore.config.terminalProxyLiveReload
+        let port = configStore.config.httpPort
+        DispatchQueue.global(qos: .utility).async {
+            if enabled {
+                TerminalProxyManager.updateEnvFile(port: port, liveReload: liveReload)
+            } else {
+                TerminalProxyManager.clearEnvFile(liveReload: liveReload)
+            }
+        }
     }
 }
 

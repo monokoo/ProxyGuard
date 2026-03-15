@@ -355,6 +355,24 @@ struct PortStatItem: View, Equatable {
                     .font(.system(size: 14))
                     .foregroundColor(.white.opacity(0.6))
             }
+
+            if configStore.config.terminalProxyEnabled {
+                CustomTooltipButton(
+                    tooltip: L10n.copyProxyCommand,
+                    edge: .top,
+                    action: {
+                        let isActive = (monitor.currentState.httpPort ?? 0) > 0 || (monitor.currentState.httpsPort ?? 0) > 0
+                        TerminalProxyManager.copyProxyCommandToClipboard(
+                            enabled: isActive,
+                            port: configStore.config.httpPort
+                        )
+                    }
+                ) {
+                    Image(systemName: "doc.on.clipboard")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+            }
             
             Spacer()
             

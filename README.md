@@ -39,6 +39,7 @@ ProxyGuard/
     │   ├── ProxyRestorer.swift      # 负责恢复代理
     │   ├── ClashConfigReader.swift  # 读 Clash 配置文件
     │   ├── ProcessChecker.swift     # 检查进程还在不在
+    │   ├── TerminalProxyManager.swift# 终端代理环境变量管理
     │   └── LogManager.swift         # 日志记录
     └── UI/                     # 界面相关
         ├── MenuBarView.swift        # 菜单栏下拉列表
@@ -57,6 +58,12 @@ ProxyGuard/
 - **自带日志**：在 `~/Library/Logs/ProxyGuard/` 下有日志，出了问题好排查，也会自动清理（保留最近 7 天）。可在设置页手动关闭。
 - **开机自启**：可以在设置里开。
 - **失败重试**：如果恢复失败，会自动多试几次。
+
+### 终端代理
+- **自动注入**：Clash Verge 系统代理开启时，自动向 `~/.proxyguard_env` 写入 `http_proxy` / `https_proxy` / `all_proxy`，新终端打开即用。关闭后自动清除，国内网络不受影响。
+- **Shell 兼容**：同时支持 zsh (`~/.zshrc`) 和 bash (`~/.bash_profile`)，一键安装 / 卸载 Shell 集成。
+- **实时刷新模式**（可选）：基于 SIGUSR1 信号通知已打开的终端实时更新代理状态，零轮询开销。仅在设置中主动开启后才会向 shell 进程发信号。
+- **菜单栏快捷操作**：「复制代理命令」按钮，一键把 `source ~/.proxyguard_env` 或 `unset` 命令复制到剪贴板。
 
 ### 界面
 - **暗色风格**：主要是因为看起来酷一点。

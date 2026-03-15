@@ -366,4 +366,53 @@ enum L10n {
     static func reportKernelSearched(names: String) -> String {
         current == .zh ? "   已搜索: \(names)\n" : "   Searched: \(names)\n"
     }
+
+    // MARK: - Terminal Proxy
+    static var tabTerminal: String {
+        current == .zh ? "终端" : "Terminal"
+    }
+
+    static var terminalProxy: String {
+        current == .zh ? "终端代理" : "Terminal Proxy"
+    }
+
+    static var terminalProxyDescription: String {
+        current == .zh ? "自动管理终端代理环境变量" : "Auto-manage terminal proxy env vars"
+    }
+
+    static var terminalProxyLiveReload: String {
+        current == .zh ? "实时刷新模式" : "Live Reload Mode"
+    }
+
+    static var terminalProxyLiveReloadDescription: String {
+        current == .zh ? "已打开的终端自动刷新代理状态（通过 shell 信号）" : "Auto-refresh proxy in open terminals (via signal)"
+    }
+
+    static var shellIntegration: String {
+        current == .zh ? "Shell 集成" : "Shell Integration"
+    }
+
+    static var installShellIntegration: String {
+        current == .zh ? "安装 Shell 集成" : "Install Shell Integration"
+    }
+
+    static var uninstallShellIntegration: String {
+        current == .zh ? "卸载 Shell 集成" : "Uninstall Shell Integration"
+    }
+
+    static var shellIntegrationInstalled: String {
+        current == .zh ? "已安装" : "Installed"
+    }
+
+    static var shellIntegrationNotInstalled: String {
+        current == .zh ? "未安装" : "Not Installed"
+    }
+
+    static var copyProxyCommand: String {
+        current == .zh ? "复制代理命令" : "Copy Proxy Command"
+    }
+
+    static var copiedToClipboard: String {
+        current == .zh ? "已复制到剪贴板" : "Copied to clipboard"
+    }
 }

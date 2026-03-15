@@ -13,16 +13,18 @@ struct SettingsView: View {
     @State private var selectedTab: SettingsTab = .proxy
     @State private var configFileExists = false
     @State private var localDelay: Double = 2.0
+    @State private var shellStatuses: [TerminalProxyManager.ShellStatus] = TerminalProxyManager.shellIntegrationStatus()
     // 缓存 AppIcon 避免切换 Tab 时重复加载闪烁
     private let appIcon: NSImage? = NSImage(contentsOfFile: Bundle.main.bundlePath + "/Contents/Resources/AppIcon.icns")
 
     enum SettingsTab: String, CaseIterable {
-        case proxy, behavior, advanced, diagnostics, history, about
+        case proxy, behavior, terminal, advanced, diagnostics, history, about
 
         var icon: String {
             switch self {
             case .proxy: return "network"
             case .behavior: return "gearshape"
+            case .terminal: return "terminal"
             case .advanced: return "slider.horizontal.3"
             case .diagnostics: return "stethoscope"
             case .history: return "clock.arrow.circlepath"
@@ -34,6 +36,7 @@ struct SettingsView: View {
             switch self {
             case .proxy: return L10n.tabProxy
             case .behavior: return L10n.tabBehavior
+            case .terminal: return L10n.tabTerminal
             case .advanced: return L10n.tabAdvanced
             case .diagnostics: return L10n.tabDiagnostics
             case .history: return L10n.tabHistory
@@ -145,6 +148,7 @@ struct SettingsView: View {
                 switch selectedTab {
                 case .proxy: proxyContent
                 case .behavior: behaviorContent
+                case .terminal: terminalContent
                 case .advanced: advancedContent
                 case .diagnostics: diagnosticsContent
                 case .history: historyContent
@@ -389,6 +393,117 @@ struct SettingsView: View {
                     isOn: $configStore.config.loggingEnabled
                 )
             }
+        }
+    }
+
+    // MARK: - 终端代理 Tab
+    private var terminalContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            settingsSectionHeader(L10n.tabTerminal, icon: "terminal")
+
+            // Terminal proxy toggle
+            darkCard {
+                darkToggleRow(
+                    title: L10n.terminalProxy,
+                    description: L10n.terminalProxyDescription,
+                    isOn: $configStore.config.terminalProxyEnabled
+                )
+            }
+
+            if configStore.config.terminalProxyEnabled {
+                // Live reload toggle
+                darkCard {
+                    darkToggleRow(
+                        title: L10n.terminalProxyLiveReload,
+                        description: L10n.terminalProxyLiveReloadDescription,
+                        isOn: $configStore.config.terminalProxyLiveReload
+                    )
+                }
+
+                // Shell integration status
+                darkCard {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(L10n.shellIntegration)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.white)
+
+                        ForEach(shellStatuses, id: \.name) { status in
+                            HStack {
+                                Text(status.name)
+                                    .font(.system(size: 12, design: .monospaced))
+                                    .foregroundColor(.white.opacity(0.7))
+                                Spacer()
+                                if status.installed {
+                                    Label(L10n.shellIntegrationInstalled, systemImage: "checkmark.circle.fill")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.neonGreen)
+                                } else {
+                                    Label(L10n.shellIntegrationNotInstalled, systemImage: "xmark.circle")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.white.opacity(0.4))
+                                }
+                            }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 4)
+                        }
+
+                        Divider().background(Color.white.opacity(0.06))
+
+                        HStack(spacing: 8) {
+                            Button(action: {
+                                TerminalProxyManager.installShellIntegration(
+                                    liveReload: configStore.config.terminalProxyLiveReload
+                                )
+                                shellStatuses = TerminalProxyManager.shellIntegrationStatus()
+                            }) {
+                                Text(L10n.installShellIntegration)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.neonBlue.opacity(0.3))
+                                    .cornerRadius(6)
+                            }
+                            .buttonStyle(.plain)
+
+                            Button(action: {
+                                TerminalProxyManager.uninstallShellIntegration()
+                                shellStatuses = TerminalProxyManager.shellIntegrationStatus()
+                            }) {
+                                Text(L10n.uninstallShellIntegration)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(.white.opacity(0.6))
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.white.opacity(0.08))
+                                    .cornerRadius(6)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 4)
+                    }
+                    .padding(.vertical, 8)
+                }
+
+                // Source command preview
+                darkCard {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("~/.proxyguard_env")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(.white.opacity(0.5))
+                        Text("[ -f \"$HOME/.proxyguard_env\" ] && source \"$HOME/.proxyguard_env\"")
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundColor(.neonGreen.opacity(0.8))
+                            .textSelection(.enabled)
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                }
+            }
+        }
+        .onAppear {
+            shellStatuses = TerminalProxyManager.shellIntegrationStatus()
         }
     }
 
